@@ -32,7 +32,7 @@ export function fetchAllPosts() {
 	return (dispatch) => {
 		dispatch(requestPosts());
 
-		fetch(`http://localhost:3001/posts`, fetchAuth)
+		return fetch(`http://localhost:3001/posts`, fetchAuth)
 			.then(
 				res => res.json(),
 				err => console.log(`An error has occurred ${err}`),
