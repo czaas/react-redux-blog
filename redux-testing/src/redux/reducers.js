@@ -1,13 +1,12 @@
 import { combineReducers } from 'redux';
+import { unionBy } from 'lodash';
 import {
 	REQUEST_CATEGORIES,
 	RECEIVE_CATEGORIES,
 
 	REQUEST_POSTS,
-	REQUEST_POST_BY_ID,
 	RECEIVE_POSTS,
 } from './actions';
-
 
 
 const initialCategoriesState = {
@@ -21,25 +20,23 @@ function categories(state = initialCategoriesState, action) {
 			return {
 				fetching: true,
 			};
-			break;
 
 		case RECEIVE_CATEGORIES:
 			let stateCategories = state.all ? state.all : [];
 
 			return {
 				fetching: false,
-				all: [stateCategories, ...action.all]
+				all: unionBy(stateCategories, action.all, 'name')
 			}
-			break;
 		default:
 			return state;
-			break;
 	}
 }
 
 const intialPostState = {
 	fetching: false,
-	posts: []
+	posts: [],
+	currentPost: {},
 };
 function posts(state = intialPostState, action) {
 	switch(action.type) {
@@ -47,18 +44,15 @@ function posts(state = intialPostState, action) {
 			return {
 				fetching: true,
 			};
-			break;
 		case RECEIVE_POSTS:
 			let statePosts = state.posts ? state.posts : [];
 
 			return {
 				fetching: false,
-				posts: [...statePosts, action.posts],
+				posts: unionBy(statePosts, action.posts, 'id'),
 			}
-			break;
 		default:
 			return state;
-			break;
 	}
 }
 

@@ -10,7 +10,6 @@ import { fetchAllPosts } from './redux/actions/posts';
 
 store.dispatch(fetchCategories());
 store.dispatch(fetchAllPosts());
-console.log(store.getState());
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

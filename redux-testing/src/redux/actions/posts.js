@@ -1,7 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import {
 	REQUEST_POSTS,
-	REQUEST_POST_BY_ID,
 	RECEIVE_POSTS,
 
 	fetchAuth,
@@ -10,12 +9,6 @@ import {
 export function requestPosts() {
 	return {
 		type: REQUEST_POSTS,
-	}
-}
-export function requestPostById(id) {
-	return {
-		type: REQUEST_POST_BY_ID,
-		id,
 	}
 }
 
@@ -48,8 +41,4 @@ export function fetchAllPosts() {
 				dispatch(receivePosts(json));
 			})
 	}
-}
-
-export function getPostById(id) {
-	
 }
