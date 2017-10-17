@@ -5,19 +5,21 @@ import {
 } from '../actions';
 
 
-const intialPostState = {
+export const initialPostState = {
 	fetching: false,
+	fetchingComments: false,
+	currentPostComments: [],
 	posts: [],
-	currentPost: {},
 };
-function posts(state = intialPostState, action) {
-	switch(action.type) {
-		case REQUEST_POSTS:
-			return {
-				fetching: true,
-			};
-		case RECEIVE_POSTS:
-			let statePosts = state.posts ? state.posts : [];
+function posts(state = initialPostState, action) {
+	if (action && action.type) {
+		switch(action.type) {
+			case REQUEST_POSTS:
+				return {
+					fetching: true,
+				};
+			case RECEIVE_POSTS:
+				let statePosts = state.posts ? state.posts : [];
 
 			return {
 				fetching: false,

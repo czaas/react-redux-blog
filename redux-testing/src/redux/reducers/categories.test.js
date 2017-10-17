@@ -1,15 +1,11 @@
 import * as actions from '../actions';
-import categoriesReducer from './categories';
+import categoriesReducer, { initialCategoriesState } from './categories';
 
 describe('categories reducer', () => {
 	// all reducers should first test for initial state being returned if none of the switches match. 
-	const initialState = {
-		fetching: false,
-		all: [],
-	};
 
 	it('should return the initial state', () => {
-		expect(categoriesReducer(undefined, undefined)).toEqual(initialState);
+		expect(categoriesReducer(undefined, undefined)).toEqual(initialCategoriesState);
 	});
 
 	it('should toggle fetching to be true when REQUEST_CATEGORIES', () => {
@@ -42,7 +38,7 @@ describe('categories reducer', () => {
 		});
 	});
 
-	it('should remove deuplicate of the same categories by name', () => {
+	it('should remove deuplicate of the same categories by path', () => {
 		const duplicateCategories = [
 			{ name: 'react', path: 'react' },
 			{ name: 'redux', path: 'redux' },

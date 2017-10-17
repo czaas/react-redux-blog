@@ -5,7 +5,7 @@ import {
 } from '../actions';
 
 
-const initialCategoriesState = {
+export const initialCategoriesState = {
 	fetching: false,
 	all: [],
 };
@@ -23,7 +23,7 @@ function categories(state = initialCategoriesState, action) {
 
 				return {
 					fetching: false,
-					all: unionBy(stateCategories, action.all, 'name')
+					all: unionBy(stateCategories, action.all, 'path')
 				}
 			default:
 				return state;
