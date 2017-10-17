@@ -14,8 +14,9 @@ describe('categories reducer', () => {
 				type: actions.REQUEST_CATEGORIES
 			})
 		).toEqual({
-			fetching: true
-		})
+			fetching: true,
+			all: []
+		});
 	});
 
 	it('should toggle fetching to false and add new categories to array', () => {

@@ -14,17 +14,17 @@ function categories(state = initialCategoriesState, action) {
 	if (action && action.type) {
 		switch(action.type) {
 			case REQUEST_CATEGORIES:
-				return {
+				return Object.assign({}, state, {
 					fetching: true,
-				};
+				});
 
 			case RECEIVE_CATEGORIES:
 				let stateCategories = state.all ? state.all : [];
 
-				return {
+				return Object.assign({}, state, {
 					fetching: false,
 					all: unionBy(stateCategories, action.all, 'path')
-				}
+				});
 			default:
 				return state;
 		}
