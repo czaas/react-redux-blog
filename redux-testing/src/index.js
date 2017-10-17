@@ -6,7 +6,8 @@ import registerServiceWorker from './registerServiceWorker';
 
 import store from './redux/store';
 import { fetchCategories } from './redux/actions/categories';
-import { fetchAllPosts, fetchComments } from './redux/actions/posts';
+import { fetchAllPosts } from './redux/actions/posts';
+import { fetchComments } from './redux/actions/comments';
 
 store.dispatch(fetchCategories());
 store.dispatch(fetchAllPosts());
