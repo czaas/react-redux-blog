@@ -45,8 +45,23 @@ describe('post actions', () => {
 
 		expect(actions.receivePosts(somePosts)).toEqual(expectedAction);
 	});
-});
 
+	it('should create a CREATE_POST object', () => {
+		expect(actions.createPost()).toEqual({ type: types.CREATE_POST });
+	});
+	it('should create a POST_CREATED object', () => {
+		const newPost = {
+			title: 'New post',
+			body: 'Post content here',
+			id: 'fakeid-321'
+		};
+		expect(actions.postCreated(newPost)).toEqual({ type: types.POST_CREATED, post: newPost });
+	});
+	it('should create a has errors object', () => {
+		const errArr = ['Missing something', 'hopefully better errors'];
+		expect(actions.postHasErrors(errArr)).toEqual({ type: types.POST_HAS_ERRORS, errors: errArr });
+	});
+});
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -67,6 +82,48 @@ describe('async posts', () => {
 		const store = mockStore({ posts: [] });
 
 		return store.dispatch(actions.fetchAllPosts()).then(() => {
+			expect(store.getActions()).toEqual(expectedActions);
+		})
+	});
+
+	it('should create new post when requirements are met', () => {
+		let validPost = {
+			"title": "Test Post 1",
+			"body": "This is a new post",
+			"author": "Cameron",
+			"category": "react"
+		};
+		nock('http://localhost:3001')
+			.post('/posts')
+			.reply(200, validPost);
+
+		const store = mockStore({ posts: [] });
+		const expectedActions = [
+			{ type: types.CREATE_POST, },
+			{ type: types.POST_CREATED, post: validPost }
+		];
+
+		return store.dispatch(actions.fetchCreatePost(validPost))
+			.then(() => {
+				expect(store.getActions()).toEqual(expectedActions)
+			});
+	});
+
+	it('should throw error action if post is invalid', () => {
+		let invalidPost = {
+			"title": "", // note invalid title
+			"body": "This is a new post",
+			"author": "Cameron",
+			"category": "react"
+		};
+
+		const store = mockStore({ posts: [], postErrors: [] });
+		const expectedActions = [
+			{ type: types.CREATE_POST, },
+			{ type: types.POST_HAS_ERRORS, errors: ['Must have a valid title.'] }
+		];
+
+		return store.dispatch(actions.fetchCreatePost(invalidPost)).then(() => {
 			expect(store.getActions()).toEqual(expectedActions);
 		})
 	});

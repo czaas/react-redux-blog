@@ -2,6 +2,10 @@ import { unionBy } from 'lodash';
 import {
 	REQUEST_POSTS,
 	RECEIVE_POSTS,
+
+	CREATE_POST,
+	POST_CREATED,
+	POST_HAS_ERRORS,
 } from '../actions';
 
 
@@ -17,11 +21,26 @@ function posts(state = initialPostState, action) {
 					fetching: true,
 				});
 			case RECEIVE_POSTS:
-				let statePosts = state.posts ? state.posts : [];
-
 				return Object.assign({}, state, {
 					fetching: false,
-					posts: unionBy(statePosts, action.posts, 'id'),
+					posts: unionBy(state.posts, action.posts, 'id'),
+				});
+
+			case CREATE_POST:
+				return Object.assign({}, state, {
+					fetching: true,
+				});
+
+			case POST_CREATED:
+				return Object.assign({}, state, {
+					fetching: false,
+					posts: [...state.posts, action.post],
+					postErrors: [],
+				});
+			case POST_HAS_ERRORS:
+				return Object.assign({}, state, {
+					fetching: false,
+					postErrors: action.errors,
 				});
 			default:
 				return state;

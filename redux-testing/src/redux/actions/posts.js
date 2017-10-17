@@ -1,7 +1,15 @@
 import fetch from 'isomorphic-fetch';
+import shortid from 'shortid';
 import {
 	REQUEST_POSTS,
 	RECEIVE_POSTS,
+
+	CREATE_POST,
+	POST_CREATED,
+	POST_HAS_ERRORS,
+
+	REQUEST_UPDATE_POST,
+	RECEIVE_UPDATE_POST,
 
 	fetchAuth,
 } from './index';
@@ -43,3 +51,78 @@ export function fetchAllPosts() {
 	}
 }
 // END getting posts
+
+// START create post
+export function createPost() {
+	return {
+		type: CREATE_POST,
+	};
+}
+export function postCreated(postFinalized) {
+	return {
+		type: POST_CREATED,
+		post: postFinalized,
+	};
+}
+export function postHasErrors(errors) {
+	return {
+		type: POST_HAS_ERRORS,
+		errors
+	};
+}
+
+export function newPostcheckForErrors(newPost) {
+	var errors = [];
+
+	if (typeof newPost.title !== 'string' || newPost.title === '') {
+		errors.push('Must have a valid title.');
+	}
+
+	if (typeof newPost.body !== 'string' || newPost.body === '') {
+		errors.push('Must have a valid content body.');
+	}
+
+	if (typeof newPost.author !== 'string' || newPost.author === '') {
+		errors.push('Must enter an authors name.');
+	}
+
+	if (typeof newPost.category !== 'string' || newPost.category === '') {
+		errors.push('Must select a valid category.');
+	}
+	return errors;
+}
+
+export function fetchCreatePost(newPost) {
+	return (dispatch) => {
+		dispatch(createPost());
+
+		newPost.timestamp = Date.now();
+		newPost.id = shortid.generate();
+
+		let validatePost = newPostcheckForErrors(newPost);
+
+		if (validatePost.length === 0) {
+			let updatedFetchHeaders = Object.assign({}, fetchAuth, {
+				method: 'POST',
+				body: newPost,
+			});
+
+			return fetch(`http://localhost:3001/posts`, updatedFetchHeaders)
+				.then(
+					res => res.json(),
+					err => console.log(`An error occurred: ${err}`)
+				)
+				.then(json => {
+					let postUpdated = Object.assign({}, newPost, json);
+					dispatch(postCreated(postUpdated));
+				})
+		} else {
+			return new Promise((resolve, reject) => {
+				dispatch(postHasErrors(validatePost));
+				resolve();
+			});
+		}
+	}
+}
+// END create post
+
