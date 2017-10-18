@@ -65,4 +65,37 @@ describe('posts reducer', () => {
 			posts: somePosts
 		});
 	});
+	it('should set fetching to true when requesting an update', () => {
+		expect(
+			postsReducer(
+				{}, {
+					type: actions.REQUEST_UPDATE_POST,
+				}
+			)
+		).toEqual({
+			fetching: true,
+		});
+	});
+
+	it('should set fetching to false and add updated post to posts array', () => {
+		const updatedPost = {
+			...somePosts[0],
+			title: 'Updated title!',
+			body: 'An updated body'
+		};
+
+		expect(
+			postsReducer(
+				{
+					posts: [somePosts[0]]
+				}, {
+					type: actions.RECEIVE_UPDATE_POST,
+					post: updatedPost
+				}
+			)
+		).toEqual({
+			fetching: false,
+			posts: [updatedPost]
+		});
+	});
 });
