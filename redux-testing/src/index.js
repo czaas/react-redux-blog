@@ -6,7 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import store from './redux/store';
 import { fetchCategories } from './redux/actions/categories';
-import { fetchAllPosts, fetchCreatePost, fetchUpdatePost } from './redux/actions/posts';
+import { fetchAllPosts, fetchCreatePost, fetchUpdatePost, fetchVoteOnPost } from './redux/actions/posts';
 import { fetchComments } from './redux/actions/comments';
 
 //store.dispatch(fetchCategories());
@@ -25,9 +25,11 @@ store.dispatch(fetchAllPosts());
 // 	"category": "react"
 // }))
 
-// setTimeout(() => {
-// 	store.dispatch(fetchUpdatePost('6ni6ok3ym7mf1p33lnez', { title: 'Back to the orig' }));
-// }, 2000);
+setTimeout(() => {
+	//store.dispatch(fetchUpdatePost('6ni6ok3ym7mf1p33lnez', { title: 'Back to the orig' }));
+
+	// store.dispatch(fetchVoteOnPost(store.getState().posts.posts[0]));
+}, 2000);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

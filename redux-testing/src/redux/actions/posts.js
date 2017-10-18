@@ -166,4 +166,27 @@ export function fetchUpdatePost(postId, postUpdates) {
 			});
 	}
 }
+
+export function fetchVoteOnPost(post, upvotePost = true) {
+	return (dispatch) => {
+		dispatch(requestUpdatePost());
+
+		let updatePostHeaders = {
+			...fetchAuth,
+			method: 'PUT',
+			body: JSON.stringify({
+				...post,
+				voteScore: post.voteScore + (upvotePost ? 1 : -1),
+			}),
+		};
+		return fetch(`http://localhost:3001/posts/${ post.id }`, updatePostHeaders)
+			.then(
+				res => res.json(),
+				err => console.log(`An error has occurred: ${ err }`)
+			)
+			.then(json => {
+				dispatch(receiveUpdatePost(json));
+			});
+	}
+}
 // END update post

@@ -3,6 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as actions from './posts.js';
 import * as types from './index.js';
+import fetch from 'isomorphic-fetch';
 
 
 const somePosts = [
@@ -166,6 +167,50 @@ describe('async posts', () => {
 
 		return store.dispatch(actions.fetchUpdatePost('fakeid-111', updatedPost)).then(() => {
 			expect(store.getActions()).toEqual(expectedActions);
-		})
+		});
+	});
+
+	it('should be able to upvote post', () => {
+		let expectedUpdatedPost = {
+			...somePosts[0],
+			voteScore: somePosts[0].voteScore + 1
+		};
+		nock('http://localhost:3001')
+			.put(`/posts/${ somePosts[0].id }`)
+			.reply(200, (url, returnedUpdate) => returnedUpdate);
+
+		const store = mockStore({ posts: [somePosts[0]] });
+		const expectedActions = [
+			{ type: types.REQUEST_UPDATE_POST },
+			{ type: types.RECEIVE_UPDATE_POST, post: expectedUpdatedPost }
+		];
+
+		return store.dispatch(actions.fetchVoteOnPost(somePosts[0]))
+			.then(() => {
+				expect(store.getActions()).toEqual(expectedActions);
+			});
+	});
+
+	it('should be able to downvote post', () => {
+		let expectedUpdatedPost = {
+			...somePosts[0],
+			voteScore: somePosts[0].voteScore - 1
+		};
+		nock('http://localhost:3001')
+			.put(`/posts/${ somePosts[0].id }`)
+			.reply((url, requestUpdated) => {
+				return requestUpdated;
+			});
+		
+		const store = mockStore({ posts: [somePosts[0]] });
+		const expectedActions = [
+			{ type: types.REQUEST_UPDATE_POST },
+			{ type: types.RECEIVE_UPDATE_POST, post: expectedUpdatedPost }
+		];
+
+		return store.dispatch(actions.fetchVoteOnPost(somePosts[0], false))
+			.then(() => {
+				expect(store.getActions()).toEqual(expectedActions);
+			});
 	});
 });
