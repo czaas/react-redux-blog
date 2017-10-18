@@ -135,7 +135,7 @@ export function fetchCreatePost(newPost) {
 
 
 // START update post
-export function requstUpdatePost() {
+export function requestUpdatePost() {
 	return {
 		type: REQUEST_UPDATE_POST,
 	};
@@ -148,7 +148,7 @@ export function receiveUpdatePost(updatedPost) {
 }
 export function fetchUpdatePost(postId, postUpdates) {
 	return (dispatch) => {
-		dispatch(requstUpdatePost());
+		dispatch(requestUpdatePost());
 
 		let updatePostHeaders = {
 			...fetchAuth,

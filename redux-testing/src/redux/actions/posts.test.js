@@ -29,37 +29,59 @@ const somePosts = [
 ];
 
 describe('post actions', () => {
-	it('should request posts', () => {
-		const expectedAction = {
-			type: types.REQUEST_POSTS
-		};
-		expect(actions.requestPosts()).toEqual(expectedAction);
+	describe('getting all posts from server', () => {
+
+		it('should request posts', () => {
+			const expectedAction = {
+				type: types.REQUEST_POSTS
+			};
+			expect(actions.requestPosts()).toEqual(expectedAction);
+		});
+
+		it('should receive posts', () => {
+
+			const expectedAction = {
+				type: types.RECEIVE_POSTS,
+				posts: somePosts
+			};
+
+			expect(actions.receivePosts(somePosts)).toEqual(expectedAction);
+		});
 	});
 
-	it('should receive posts', () => {
-
-		const expectedAction = {
-			type: types.RECEIVE_POSTS,
-			posts: somePosts
-		};
-
-		expect(actions.receivePosts(somePosts)).toEqual(expectedAction);
+	describe('creating posts', () => {
+		it('should create a CREATE_POST object', () => {
+			expect(actions.createPost()).toEqual({ type: types.CREATE_POST });
+		});
+		it('should create a POST_CREATED object', () => {
+			const newPost = {
+				title: 'New post',
+				body: 'Post content here',
+				id: 'fakeid-321'
+			};
+			expect(actions.postCreated(newPost)).toEqual({ type: types.POST_CREATED, post: newPost });
+		});
+		it('should create a has errors object if a field is missing', () => {
+			const errArr = ['Missing something', 'hopefully better errors'];
+			expect(actions.postHasErrors(errArr)).toEqual({ type: types.POST_HAS_ERRORS, errors: errArr });
+		});
 	});
 
-	it('should create a CREATE_POST object', () => {
-		expect(actions.createPost()).toEqual({ type: types.CREATE_POST });
-	});
-	it('should create a POST_CREATED object', () => {
-		const newPost = {
-			title: 'New post',
-			body: 'Post content here',
-			id: 'fakeid-321'
-		};
-		expect(actions.postCreated(newPost)).toEqual({ type: types.POST_CREATED, post: newPost });
-	});
-	it('should create a has errors object', () => {
-		const errArr = ['Missing something', 'hopefully better errors'];
-		expect(actions.postHasErrors(errArr)).toEqual({ type: types.POST_HAS_ERRORS, errors: errArr });
+	describe('updating a post', () => {
+		it('should create a update post action creator', () => {
+			const expectedAction = { type: types.REQUEST_UPDATE_POST };
+			expect(actions.requestUpdatePost()).toEqual(expectedAction);
+		});
+		it('should create a received update post with post action creator', () => {
+			const updatedPost = {
+				title: 'I was updated',
+			};
+			const expectedAction = {
+				type: types.RECEIVE_UPDATE_POST,
+				post: updatedPost
+			}
+			expect(actions.receiveUpdatePost(updatedPost)).toEqual(expectedAction);
+		});
 	});
 });
 
@@ -69,7 +91,7 @@ const mockStore = configureMockStore(middlewares);
 describe('async posts', () => {
 	afterEach(() => nock.cleanAll());
 
-	it('creates REQUEST_POSTS and RECEIVE_POSTS when fetching has complete', () => {
+	it('Fetching all posts creates REQUEST_POSTS and RECEIVE_POSTS when fetching has complete', () => {
 		nock('http://localhost:3001')
 			.get('/posts')
 			.reply(200, somePosts);
@@ -124,6 +146,25 @@ describe('async posts', () => {
 		];
 
 		return store.dispatch(actions.fetchCreatePost(invalidPost)).then(() => {
+			expect(store.getActions()).toEqual(expectedActions);
+		})
+	});
+
+	it('should request a update to a post', () => {
+		let updatedPost = {
+			title: 'an updated post',
+		};
+		nock('http://localhost:3001')
+			.put('/posts/fakeid-111')
+			.reply(200, updatedPost);
+
+		const store = mockStore({ posts: [] });
+		const expectedActions = [
+			{ type: types.REQUEST_UPDATE_POST },
+			{ type: types.RECEIVE_UPDATE_POST, post: updatedPost }
+		];
+
+		return store.dispatch(actions.fetchUpdatePost('fakeid-111', updatedPost)).then(() => {
 			expect(store.getActions()).toEqual(expectedActions);
 		})
 	});
