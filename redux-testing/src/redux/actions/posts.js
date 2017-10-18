@@ -23,6 +23,7 @@ export function requestPosts() {
 
 export function receivePosts(posts) {
 	let arrayOfPosts;
+	let allPostsReceivedAndValidated = [];
 	
 	if (!Array.isArray(posts)) {
 		arrayOfPosts = [posts];
@@ -30,9 +31,15 @@ export function receivePosts(posts) {
 		arrayOfPosts = posts;
 	}
 
+	arrayOfPosts.forEach((post) => {
+		if (post && post.id) {
+			allPostsReceivedAndValidated.push(post);
+		}
+	});
+
 	return {
 		type: RECEIVE_POSTS,
-		posts: arrayOfPosts,
+		posts: allPostsReceivedAndValidated,
 	}
 }
 
@@ -47,7 +54,7 @@ export function fetchAllPosts() {
 			)
 			.then(json => {
 				dispatch(receivePosts(json));
-			})
+			});
 	}
 }
 // END getting posts
@@ -126,3 +133,37 @@ export function fetchCreatePost(newPost) {
 }
 // END create post
 
+
+// START update post
+export function requstUpdatePost() {
+	return {
+		type: REQUEST_UPDATE_POST,
+	};
+}
+export function receiveUpdatePost(updatedPost) {
+	return {
+		type: RECEIVE_UPDATE_POST,
+		post: updatedPost,
+	}
+}
+export function fetchUpdatePost(postId, postUpdates) {
+	return (dispatch) => {
+		dispatch(requstUpdatePost());
+
+		let updatePostHeaders = {
+			...fetchAuth,
+			method: 'PUT',
+			body: JSON.stringify(postUpdates),
+		};
+
+		return fetch(`http://localhost:3001/posts/${ postId }`, updatePostHeaders)
+			.then(
+				res => res.json(),
+				err => console.log(`An error has occurred: ${ err }`)
+			)
+			.then(json => {
+				dispatch(receiveUpdatePost(json));
+			});
+	}
+}
+// END update post

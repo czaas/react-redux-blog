@@ -1,6 +1,8 @@
 export const fetchAuth = {
 	headers: {
-		Authorization: 'something-here',
+		'Authorization': 'something-here',
+		'Accept': 'application/json',
+        'Content-Type': 'application/json',
 	}
 };
 
@@ -17,3 +19,5 @@ export const CREATE_POST = 'CREATE_POST';
 export const POST_CREATED = 'POST_CREATED';
 export const POST_HAS_ERRORS = 'POST_HAS_ERRORS';
 
+export const REQUEST_UPDATE_POST = 'REQUEST_UPDATE_POST';
+export const RECEIVE_UPDATE_POST = 'RECEIVE_UPDATE_POST';

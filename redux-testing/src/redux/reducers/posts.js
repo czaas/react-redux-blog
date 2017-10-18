@@ -6,6 +6,9 @@ import {
 	CREATE_POST,
 	POST_CREATED,
 	POST_HAS_ERRORS,
+
+	REQUEST_UPDATE_POST,
+	RECEIVE_UPDATE_POST,
 } from '../actions';
 
 
@@ -21,10 +24,12 @@ function posts(state = initialPostState, action) {
 					fetching: true,
 				});
 			case RECEIVE_POSTS:
-				return Object.assign({}, state, {
+
+				return {
+					...state,
 					fetching: false,
 					posts: unionBy(state.posts, action.posts, 'id'),
-				});
+				};
 
 			case CREATE_POST:
 				return Object.assign({}, state, {
@@ -42,6 +47,22 @@ function posts(state = initialPostState, action) {
 					fetching: false,
 					postErrors: action.errors,
 				});
+			case REQUEST_UPDATE_POST:
+				return Object.assign({}, state, {
+					fetching: true,
+				});
+			case RECEIVE_UPDATE_POST:
+				let allPosts = [];
+				state.posts.forEach((post) => {
+					if (post.id !== action.post.id) {
+						allPosts.push(post);
+					}
+				});
+				return {
+					...state,
+					posts: [...allPosts, action.post],
+					fetching: false,
+				};
 			default:
 				return state;
 		}

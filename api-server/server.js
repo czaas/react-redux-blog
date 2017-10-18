@@ -9,7 +9,6 @@ const posts = require('./posts')
 const comments = require('./comments')
 
 const app = express()
-
 app.use(express.static('public'))
 app.use(cors())
 

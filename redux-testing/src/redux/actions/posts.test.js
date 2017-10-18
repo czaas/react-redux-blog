@@ -83,7 +83,7 @@ describe('async posts', () => {
 
 		return store.dispatch(actions.fetchAllPosts()).then(() => {
 			expect(store.getActions()).toEqual(expectedActions);
-		})
+		});
 	});
 
 	it('should create new post when requirements are met', () => {
