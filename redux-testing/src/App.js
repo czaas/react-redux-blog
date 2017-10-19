@@ -33,10 +33,19 @@ class App extends Component {
           <div className="App__content">
             <main>
               <Switch>
-                <Route path="/" exact component={() => <PostList posts={this.props.allPosts} />} />
-                <Route path="/post/new" component={(props) => <EditPost {...props} saveNewPost={this.props.saveNewPost} />} />
-                <Route path="/post/:id/edit" component={(props) => <EditPost {...props} posts={this.props.allPosts} updatePost={this.props.updatePost} />} />
-                <Route path="/post/:id" component={(props) => <Post {...props} posts={this.props.allPosts} upVote={this.props.upVotePost} downVote={this.props.downVotePost} />} />
+                <Route path="/" exact render={() => <PostList posts={this.props.allPosts} />} />
+                <Route path="/post/new" render={(props) => <EditPost {...props} saveNewPost={this.props.saveNewPost} />} />
+                <Route path="/post/:id/edit" render={(props) => <EditPost {...props} posts={this.props.allPosts} updatePost={this.props.updatePost} />} />
+                <Route path="/post/:id" render={({ match }) => {
+                  var currentPost = this.props.allPosts.find(p => p.id === match.params.id);
+
+                  if (currentPost) { 
+                    return <Post post={currentPost} posts={this.props.allPosts} upVote={this.props.upVotePost} downVote={this.props.downVotePost} />
+                  } else {
+                    return <FourZeroFour />
+                  }
+
+                }} />
                 <Route path="*" component={FourZeroFour} />
               </Switch>
             </main>

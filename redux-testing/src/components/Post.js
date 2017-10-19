@@ -5,51 +5,30 @@ import { circleDown } from 'react-icons-kit/icomoon/circleDown';
 import { pencil } from 'react-icons-kit/icomoon/pencil'; 
 import { Link } from 'react-router-dom';
 
-class Post extends React.Component {
-	state = {
-		post: {}
+const Post = (props) => {
+	let bodyContent = props.post.body;
+
+	if (bodyContent) {
+		bodyContent = bodyContent.replace(/\n/g, '<br />');
 	}
-	componentWillMount(props) {
-		let currentPost;
+	return (
+		<section className="viewPost">
+			<div className="viewPost__content">
+				<h1>{props.post.title}</h1>
+				<div className="viewPost__upvote">
+					<span id="voteScore">{props.post.voteScore}</span>
+					<Icon icon={circleUp} id="upVote" onClick={() => props.upVote(props.post)} />
+					<Icon icon={circleDown} id="downVote" onClick={() => props.downVote(props.post)} />
 
-		this.props.posts.map((post) => {
-			if (post.id === this.props.match.params.id) {
-				currentPost = post;
-			}
-			return post;
-		});
-
-		if (currentPost) {
-			this.setState({
-				post: currentPost
-			});
-		}
-	}
-	render() {
-		let bodyContent = this.state.post.body;
-
-		if (bodyContent) {
-			bodyContent = bodyContent.replace(/\n/g, '<br />');
-		}
-		return (
-			<section className="viewPost">
-				<div className="viewPost__content">
-					<h1>{this.state.post.title}</h1>
-					<div className="viewPost__upvote">
-						{this.state.post.voteScore}
-						<Icon icon={circleUp} onClick={() => this.props.upVote(this.state.post)} />
-						<Icon icon={circleDown} onClick={() => this.props.downVote(this.state.post)} />
-
-						<Link to={`/post/${ this.state.post.id }/edit`}><Icon icon={pencil} /></Link>
-					</div>
-
-					<p>Posted by: <strong>{this.state.post.author}</strong></p>
-					
-					<div id="bodyContent" dangerouslySetInnerHTML={{__html: bodyContent}} />
+					<Link to={`/post/${ props.post.id }/edit`}><Icon icon={pencil} /></Link>
 				</div>
-			</section>
-		);
-	}
+
+				<p id="author">Posted by: <strong>{props.post.author}</strong></p>
+				
+				<div id="bodyContent" dangerouslySetInnerHTML={{__html: bodyContent}} />
+			</div>
+		</section>
+	);
 }
 
 export default Post;
