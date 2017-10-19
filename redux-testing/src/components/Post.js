@@ -45,7 +45,7 @@ class Post extends React.Component {
 
 					<p>Posted by: <strong>{this.state.post.author}</strong></p>
 					
-					<div dangerouslySetInnerHTML={{__html: bodyContent}} />
+					<div id="bodyContent" dangerouslySetInnerHTML={{__html: bodyContent}} />
 				</div>
 			</section>
 		);
