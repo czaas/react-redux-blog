@@ -10,7 +10,6 @@ class EditPost extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log(this.props.match);
 		if (this.props.match.params.id) {
 			let currentPost = {};
 
@@ -49,11 +48,9 @@ class EditPost extends React.Component {
 		if (e) {
 			e.preventDefault();
 		}
-		console.log(this.state, this.props);
 
 		if (this.state.id !== '') {
 			// update post
-			console.log(this.state);
 			this.props.updatePost(this.state);
 
 			this.props.history.push(`/post/${ this.state.id }`);
