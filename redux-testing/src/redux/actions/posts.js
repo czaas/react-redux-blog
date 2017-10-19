@@ -111,7 +111,7 @@ export function fetchCreatePost(newPost) {
 		if (validatePost.length === 0) {
 			let updatedFetchHeaders = Object.assign({}, fetchAuth, {
 				method: 'POST',
-				body: newPost,
+				body: JSON.stringify(newPost),
 			});
 
 			return fetch(`http://localhost:3001/posts`, updatedFetchHeaders)
@@ -121,6 +121,7 @@ export function fetchCreatePost(newPost) {
 				)
 				.then(json => {
 					let postUpdated = Object.assign({}, newPost, json);
+					
 					dispatch(postCreated(postUpdated));
 				})
 		} else {

@@ -6,5 +6,48 @@
 }
 
 .App__content {
-  padding: 0 5%;
+  position: relative;
+}
+
+.App__content main {
+	padding: 0 5%;	
+}
+.App__content aside {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	min-height: 60px;
+	background: #666;
+	color: #fff;
+	padding: 0 5%;
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.App__content aside a {
+	color: #fff;
+}
+
+@media screen and (min-width: 768px) {
+	.App__content {
+		display: flex;
+		justify-content: space-between;
+		height: 100%;
+	}
+	.App__content main {
+		flex: 1 1 75%;
+		max-width: 75%;
+	}
+	.App__content aside {
+		position: relative;
+		flex: 1 1 20%;
+		max-width: 20%;
+		padding: 0 20px;
+		align-self: flex-start;
+		display: flex;
+		align-items: flex-start;
+		min-height: 300px;
+	}
 }
