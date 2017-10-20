@@ -8,7 +8,7 @@ import {
 import { connect } from 'react-redux';
 
 // redux actions
-import { fetchAllPosts, fetchCreatePost, fetchVoteOnPost, fetchUpdatePost } from './redux/actions/posts';
+import { fetchAllPosts, fetchCreatePost, fetchVoteOnPost, fetchUpdatePost, fetchDeletePost } from './redux/actions/posts';
 
 // app components and resources
 import PostList from './components/PostList';
@@ -82,6 +82,9 @@ const mapDispatchToProps = dispatch => {
     downVotePost: (post) => {
       dispatch(fetchVoteOnPost(post, false));
     },
+    deletePost: (postId) => {
+      dispatch(fetchDeletePost(postId));
+    }
   }
 }
 

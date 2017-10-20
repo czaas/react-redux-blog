@@ -66,11 +66,29 @@ class EditPost extends React.Component {
 		}
 	}
 
+	deletePost = () => {
+		let confirmation = window.confirm('Are you sure? There is no undo.');
+
+		if (confirmation) {
+			this.props.deletePost(this.state.id);
+			this.props.history.push('/');
+		}
+	}
+
+	showDeletePost = () => {
+		if (this.state.id.length > 0) {
+			return (
+				<p style={{ color: 'red', cursor: 'pointer' }} onClick={this.deletePost}>Delete Post</p>
+			);
+		}
+	}
+
 	render() {
 		let header = this.state.id.length === 0 ? 'New Post' : 'Edit Post';
 		return (
 			<section>
 				<h1>{header}</h1>
+				{this.showDeletePost()}
 				<form onSubmit={this.onSave}>
 					<div>
 						<label htmlFor="title">Post Title</label>
