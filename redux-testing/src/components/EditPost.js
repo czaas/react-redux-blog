@@ -1,13 +1,15 @@
 import React from 'react';
 
+const initialEditPostState = {
+	id: '',
+	title: '',
+	author: '',
+	category: '',
+	body: '',
+};
+
 class EditPost extends React.Component {
-	state = {
-		id: '',
-		title: '',
-		author: '',
-		category: '',
-		body: '',
-	}
+	state = initialEditPostState;
 
 	componentDidMount() {
 		if (this.props.post && this.props.post.id !== '') {
@@ -15,6 +17,18 @@ class EditPost extends React.Component {
 				return {
 					...this.props.post 
 				};
+			});
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.post.id) {
+			this.setState(() => {
+				return nextProps.post;
+			});
+		} else {
+			this.setState(() => {
+				return initialEditPostState;
 			});
 		}
 	}
