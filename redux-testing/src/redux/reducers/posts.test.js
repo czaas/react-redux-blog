@@ -98,4 +98,31 @@ describe('posts reducer', () => {
 			posts: [updatedPost]
 		});
 	});
+	it('should set fetching to true when requesting to delete post', () => {
+		let startingState = {
+			posts: [...somePosts],
+			fetching: false,
+		};
+		let expectedState = {
+			...startingState,
+			fetching: true,
+		};
+
+		expect(postsReducer(startingState, { type: actions.REQUEST_DELETE_POST }))	
+			.toEqual(expectedState);
+	});
+	it('should set fetching to false and remove a post when received delete post', () => {
+		let startingState = {
+			posts: [...somePosts],
+			fetching: true,
+		};
+		let postToBeDeleted = startingState.posts[1].id;
+		let expectedState = {
+			posts: [somePosts[0]],
+			fetching: false,
+		};
+
+		expect(postsReducer(startingState, { type: actions.RECEIVE_DELETE_POST, id: postToBeDeleted }))
+			.toEqual(expectedState)
+	});
 });

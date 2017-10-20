@@ -11,6 +11,9 @@ import {
 	REQUEST_UPDATE_POST,
 	RECEIVE_UPDATE_POST,
 
+	REQUEST_DELETE_POST,
+	RECEIVE_DELETE_POST,
+
 	fetchAuth,
 } from './index';
 
@@ -191,3 +194,37 @@ export function fetchVoteOnPost(post, upvotePost = true) {
 	}
 }
 // END update post
+
+// START delete post
+export function requestDeletePost() {
+	return {
+		type: REQUEST_DELETE_POST,
+	};
+}
+
+export function receiveDeletePost(postId) {
+	return {
+		type: RECEIVE_DELETE_POST,
+		id: postId,
+	};
+}
+
+export function fetchDeletePost(postId) {
+	return (dispatch) => {
+		dispatch(requestDeletePost());
+
+		let deletePostHeaders = {
+			...fetchAuth,
+			method: 'DELETE',
+		};
+		return fetch(`http://localhost:3001/posts/${postId}`, deletePostHeaders)
+			.then(
+				res => res.json(),
+				err => console.log(`An error has occurred: ${ err }`)
+			)
+			.then(json => {
+				dispatch(receiveDeletePost(json.id));
+			});
+	}
+}
+// END delete post

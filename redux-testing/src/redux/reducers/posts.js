@@ -9,6 +9,9 @@ import {
 
 	REQUEST_UPDATE_POST,
 	RECEIVE_UPDATE_POST,
+
+	REQUEST_DELETE_POST,
+	RECEIVE_DELETE_POST,
 } from '../actions';
 
 
@@ -62,6 +65,17 @@ function posts(state = initialPostState, action) {
 					...state,
 					posts: [...allPosts, action.post],
 					fetching: false,
+				};
+			case REQUEST_DELETE_POST:
+				return {
+					...state,
+					fetching: true,
+				}
+			case RECEIVE_DELETE_POST:
+				return {
+					...state,
+					fetching: false,
+					posts: state.posts.filter((post) => post.id !== action.id),
 				};
 			default:
 				return state;

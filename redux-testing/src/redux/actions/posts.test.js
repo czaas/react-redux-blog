@@ -84,6 +84,18 @@ describe('post actions', () => {
 			expect(actions.receiveUpdatePost(updatedPost)).toEqual(expectedAction);
 		});
 	});
+
+	describe('deleting a post', () => {
+		it('should create a request delete post action', () => {
+			const expectedAction = { type: types.REQUEST_DELETE_POST };
+			expect(actions.requestDeletePost()).toEqual(expectedAction);
+		});
+		it('should create a received delete post action along with returning the id of post to be deleted', () => {
+			let fakePostId = 'fakeid-222';
+			const expectedAction = { type: types.RECEIVE_DELETE_POST, id: fakePostId, };
+			expect(actions.receiveDeletePost(fakePostId)).toEqual(expectedAction);
+		});
+	});
 });
 
 const middlewares = [thunk];
@@ -209,6 +221,24 @@ describe('async posts', () => {
 		];
 
 		return store.dispatch(actions.fetchVoteOnPost(somePosts[0], false))
+			.then(() => {
+				expect(store.getActions()).toEqual(expectedActions);
+			});
+	});
+
+	it('should delete post', () => {
+		let postToBeDeletedId = 'fakeId-223';
+		nock('http://localhost:3001')
+			.delete(`/posts/${ postToBeDeletedId }`)
+			.reply(200, { id: postToBeDeletedId });
+
+		const store = mockStore({ posts: [] });
+		const expectedActions = [
+			{ type: types.REQUEST_DELETE_POST },
+			{ type: types.RECEIVE_DELETE_POST, id: postToBeDeletedId }
+		];
+
+		return store.dispatch(actions.fetchDeletePost(postToBeDeletedId))
 			.then(() => {
 				expect(store.getActions()).toEqual(expectedActions);
 			});
