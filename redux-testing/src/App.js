@@ -35,20 +35,20 @@ class App extends Component {
               <Switch>
                 <Route path="/" exact render={() => <PostList posts={this.props.allPosts} />} />
                 <Route path="/post/new" render={(props) => <EditPost {...props} post={{}} saveNewPost={this.props.saveNewPost} />} />
-                <Route path="/post/:id/edit" render={({ match }) => {
+                <Route path="/post/:id/edit" render={({ match, history }) => {
                   var currentPost = this.props.allPosts.find(p => p.id === match.params.id);
 
                   if (currentPost) {
-                    return <EditPost post={currentPost} updatePost={this.props.updatePost} deletePost={this.props.deletePost} />
+                    return <EditPost post={currentPost} history={history} updatePost={this.props.updatePost} deletePost={this.props.deletePost} />
                   } else {
                     return <FourZeroFour />
                   }
                 }} />
-                <Route path="/post/:id" render={({ match }) => {
+                <Route path="/post/:id" render={({ match, history }) => {
                   var currentPost = this.props.allPosts.find(p => p.id === match.params.id);
 
                   if (currentPost) { 
-                    return <Post post={currentPost} posts={this.props.allPosts} upVote={this.props.upVotePost} downVote={this.props.downVotePost} />
+                    return <Post post={currentPost} history={history} posts={this.props.allPosts} upVote={this.props.upVotePost} downVote={this.props.downVotePost} />
                   } else {
                     return <FourZeroFour />
                   }
