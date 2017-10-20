@@ -10,30 +10,12 @@ class EditPost extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.props.match.params.id) {
-			let currentPost = {};
-
-			this.props.posts.map(post => {
-				if (post.id === this.props.match.params.id) {
-					currentPost = {
-						...post,
-					};
-				}
-
-				return post;
+		if (this.props.post && this.props.post.id !== '') {
+			this.setState(() => { 
+				return {
+					...this.props.post 
+				};
 			});
-
-			if (currentPost.id) {
-				this.setState(() => {
-					return {
-						id: currentPost.id,
-						title: currentPost.title,
-						author: currentPost.author,
-						category: currentPost.category,
-						body: currentPost.body,
-					}
-				});
-			}
 		}
 	}
 

@@ -35,7 +35,15 @@ class App extends Component {
               <Switch>
                 <Route path="/" exact render={() => <PostList posts={this.props.allPosts} />} />
                 <Route path="/post/new" render={(props) => <EditPost {...props} saveNewPost={this.props.saveNewPost} />} />
-                <Route path="/post/:id/edit" render={(props) => <EditPost {...props} posts={this.props.allPosts} updatePost={this.props.updatePost} />} />
+                <Route path="/post/:id/edit" render={({ match }) => {
+                  var currentPost = this.props.allPosts.find(p => p.id === match.params.id);
+
+                  if (currentPost) {
+                    return <EditPost post={currentPost} updatePost={this.props.updatePost} deletePost={this.props.deletePost} />
+                  } else {
+                    return <FourZeroFour />
+                  }
+                }} />
                 <Route path="/post/:id" render={({ match }) => {
                   var currentPost = this.props.allPosts.find(p => p.id === match.params.id);
 
