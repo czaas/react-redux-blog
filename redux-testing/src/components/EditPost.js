@@ -22,13 +22,12 @@ class EditPost extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.post.id) {
+		if (nextProps.post) {
 			this.setState(() => {
-				return nextProps.post;
-			});
-		} else {
-			this.setState(() => {
-				return initialEditPostState;
+				return {
+					...initialEditPostState,
+					...nextProps.post,
+				};
 			});
 		}
 	}
