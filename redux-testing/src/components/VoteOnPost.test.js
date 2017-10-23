@@ -15,7 +15,7 @@ const testPost = {
     "deleted": false
 };
 
-describe('test for vote on post', () => {
+describe('<VoteOnPost /> component', () => {
 
 	it('renders the component', () => {
 		const wrapper = shallow(<VoteOnPost post={testPost} />);
