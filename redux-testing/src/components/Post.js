@@ -1,9 +1,8 @@
 import React from 'react';
-import Icon from 'react-icons-kit';
-import { circleUp } from 'react-icons-kit/icomoon/circleUp';
-import { circleDown } from 'react-icons-kit/icomoon/circleDown';   
+import Icon from 'react-icons-kit';  
 import { pencil } from 'react-icons-kit/icomoon/pencil'; 
 import { Link } from 'react-router-dom';
+import VoteOnPost from './VoteOnPost';
 
 const Post = (props) => {
 	let bodyContent = props.post.body;
@@ -16,10 +15,7 @@ const Post = (props) => {
 			<div className="viewPost__content">
 				<h1>{props.post.title}</h1>
 				<div className="viewPost__upvote">
-					<span id="voteScore">{props.post.voteScore}</span>
-					<Icon icon={circleUp} id="upVote" onClick={() => props.upVote(props.post)} />
-					<Icon icon={circleDown} id="downVote" onClick={() => props.downVote(props.post)} />
-
+					<VoteOnPost post={props.post} />
 					<Link to={`/post/${ props.post.id }/edit`}><Icon icon={pencil} /></Link>
 				</div>
 
