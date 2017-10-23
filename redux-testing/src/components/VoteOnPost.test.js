@@ -37,4 +37,23 @@ describe('test for vote on post', () => {
 
 		expect(spy.callCount).toBe(2);
 	});
+
+	it('should return the post to be updated when upvote is clicked', () => {
+		const spy = sinon.spy();
+		const wrapper = shallow(<VoteOnPost post={testPost} upVotePost={spy} />);
+
+		wrapper.find('#upVote').simulate('click');
+		expect(spy.alwaysCalledWithExactly(testPost)).toBe(true);		
+	});
+	it('should return the post to be updated when downvote is clicked', () => {
+		const spy = sinon.spy();
+		const modifiedPost = {
+			...testPost,
+			title: 'This is a test'
+		};
+		const wrapper = shallow(<VoteOnPost post={modifiedPost} downVotePost={spy} />);
+
+		wrapper.find('#downVote').simulate('click');
+		expect(spy.alwaysCalledWithExactly(modifiedPost)).toBe(true);		
+	});
 });
