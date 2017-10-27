@@ -12,10 +12,15 @@ To get started developing right away:
     - `cd api-server`
     - `npm install`
     - `node server`
-* In another terminal window, use Create React App to scaffold out the front-end
-    - `create-react-app frontend`
-    - `cd frontend`
-    - `npm start`
+* To view the front end
+	- `cd redux-testing`
+	- `npm install`
+	- `npm run start`
+
+* Run tests for the front end
+	- `cd redux-testing`
+	- `npm install`
+	- `npm run test`
 
 ## API Server
 
